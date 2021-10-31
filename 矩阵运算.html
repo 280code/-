@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>矩阵运算</title>
+</head>
+<style>
+    .tool {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .a {
+        flex: 2.5;
+    }
+
+    .b {
+        flex: 2.5;
+    }
+
+    .c {
+        flex: 2.5;
+    }
+
+    .multiple {
+        flex: 1
+    }
+
+    .equa {
+        flex: 1.5;
+    }
+
+
+    input,
+    span {
+        width: 20px;
+        height: 20px;
+
+    }
+</style>
+
+<body>
+    <div class="tool">
+        <section class="a">
+            <div class="a-arguments">
+                <input type="text" class="a-row">
+                <input type="text" class="a-column">
+                <button class="a-submit">
+                    提交
+                </button>
+            </div>
+            <div class="a-content"></div>
+        </section>
+        <section class="multiple">*</section>
+        <section class="b">
+            <div class="b-arguments">
+                <input type="text" class="b-column">
+                <button class="b-submit">
+                    提交
+                </button>
+            </div>
+            <div class="b-content"></div>
+        </section>
+        <section class="equal">=</section>
+        <section class="c"></section>
+    </div>
+
+    <script src="./js/jquery-3.6.0.js"></script>
+    <script>
+        $(".a-submit").click(() => {
+            $(".a-content").html(getMartix($(".a-row").val(),
+                $(".a-column").val(), "a-div", "a-input"));
+        })
+        $(".b-submit").click(() => {
+            $(".b-content").html(getMartix($(".a-row").val(),
+                $(".b-column").val(), "a-div", "a-input"));
+        })
+        $(".equal").click(() => {
+            $(".c").html(getResult($(".a-content").find(" div"),
+                $(".b-content").find(" div")));
+        })
+
+        function getMartix(row, column, divClass, inputClass) {
+            let divs = [];
+            for (let i = 0; i < row; i++) {
+                let $div = $("<div>");
+                $div.addClass(divClass);
+                $div.append(getInputs(column, inputClass));
+                divs[i] = $div;
+            }
+            return divs
+        }
+        function getInputs(num, className) {
+            let inputs = []
+            for (let i = 0; i < num; i++) {
+                inputs[i] = $("<input>").addClass(className);
+            }
+            return inputs
+        }
+        function getResult(a = [], b = []) {
+            let cdivs = [];
+            let row = a.length;
+            let column = b[0].querySelectorAll("input").length;
+            a.each((index, adiv) => {//c的行
+                let spans = [];
+                for (let j = 0; j < column; j++) {//c的列
+                    let num = 0;
+                    b.each((index, bdiv) => {//c的每一个
+                        num += adiv.querySelectorAll("input")[index].value *
+                            bdiv.querySelectorAll("input")[j].value;
+                    })
+                    spans[j] = $("<span>").text(num);
+                }
+                cdivs[index] = $("<div>").append(spans);
+                console.log(spans);
+            })
+            return cdivs;
+
+        }
+    </script>
+</body>
+
+</html>
